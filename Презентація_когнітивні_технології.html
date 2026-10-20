@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Когнітивні технології: концепція впровадження</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Unbounded:wght@400..700&display=swap">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #0B1428; overflow: hidden; font-family: 'Manrope', Arial, sans-serif; }
+  #viewport { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+  #stage { position: relative; width: 1920px; height: 1080px; flex: none; transform-origin: center center; }
+  #stage > section { position: absolute; inset: 0; width: 1920px; height: 1080px; box-sizing: border-box; overflow: hidden; }
+  #stage > section:not(.active) { display: none !important; }
+  #stage > section.active { animation: fade .35s ease; }
+  #stage h1, #stage h2, #stage h3, #stage p, #stage ul, #stage ol { margin: 0; }
+  #stage div { box-sizing: border-box; }
+  aside.notes { display: none; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { #stage > section.active { animation: none; } }
+
+  #quiz-layer { position: fixed; inset: 0; display: none; flex-direction: column; background: #14213D; z-index: 5; }
+  #quiz-layer.active { display: flex; }
+  #quiz-layer header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 20px; color: #F7F5F0; font-size: 16px; }
+  #quiz-layer header b { color: #F29A55; letter-spacing: 2px; font-size: 14px; }
+  #quiz-layer iframe { flex: 1; width: 100%; border: 0; background: #F7F5F0; }
+
+  #controls { position: fixed; right: 16px; bottom: 16px; display: flex; gap: 8px; align-items: center; z-index: 10; }
+  #controls button { font: inherit; font-size: 15px; min-width: 44px; height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid #2E4170; background: #1E2E52; color: #F7F5F0; cursor: pointer; }
+  #controls button:hover { background: #2E4170; }
+  #controls button:focus-visible { outline: 2px solid #F29A55; outline-offset: 2px; }
+  #counter { color: #F7F5F0; background: #1E2E52; border: 1px solid #2E4170; border-radius: 22px; height: 44px; line-height: 42px; padding: 0 14px; font-size: 15px; min-width: 72px; text-align: center; font-variant-numeric: tabular-nums; }
+  #progress { position: fixed; left: 0; top: 0; height: 4px; background: #F29A55; transition: width .3s; z-index: 10; }
+  #notes { position: fixed; left: 16px; right: 16px; bottom: 72px; max-width: 900px; padding: 16px 20px; border-radius: 12px; background: rgba(11,20,40,.94); color: #F7F5F0; font-size: 17px; line-height: 1.5; display: none; z-index: 10; }
+  #notes.show { display: block; }
+  body.quiz-mode #controls { bottom: auto; top: 6px; }
+  body.quiz-mode #controls #notes-btn, body.quiz-mode #controls #fs-btn { display: none; }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="viewport"><div id="stage">
+<section id="cover" data-transition="fade" style="background:#14213D;color:#F7F5F0;font-family:'Manrope', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:end;gap:32px">
+<div style="position:absolute;left:1112px;top:128px;width:420px;height:420px;background:transparent;border:4px solid #F29A55;border-radius:50%"></div>
+<div style="position:absolute;left:1372px;top:128px;width:420px;height:420px;background:transparent;border:4px solid #7FA7E8;border-radius:50%"></div>
+<p style="position:absolute;left:1122px;top:316px;width:240px;font-size:30px;font-weight:700;color:#F29A55;text-align:center">Людина</p>
+<p style="position:absolute;left:1542px;top:316px;width:240px;font-size:30px;font-weight:700;color:#7FA7E8;text-align:center">ШІ-агенти</p>
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#F29A55">КОНЦЕПЦІЯ ВПРОВАДЖЕННЯ · 2026</p>
+<h1 style="font-family:'Unbounded', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1.05;color:#F7F5F0">Когнітивні<br>технології</h1>
+<p style="width:1100px;font-size:36px;line-height:1.35;color:#C9D3E3">Мотивована людина + агенти ШІ = вимірюваний результат</p>
+<aside class="notes">Тема: як впроваджувати когнітивні технології, щоб вони давали реальний результат. Два кола — дві опори концепції: людина і технології. Вся сила — у їхньому перетині.</aside>
+</section>
+<section id="idea" data-transition="fade" style="background:#F7F5F0;color:#14213D;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#B4561A">ІДЕЯ</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.2;color:#14213D">Когнітивні технології — системне посилення мислення та ефективності людини</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:48px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#B4561A">ОПОРА 1</p>
+<h3 style="font-family:'Unbounded', Arial, sans-serif;font-size:44px;font-weight:600;color:#14213D">Людина</h3>
+<p style="font-size:28px;line-height:1.4;color:#4A5568">Хоче і вміє працювати по-новому: мотивація, поведінка, оцінка результату</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#14213D;border-radius:20px;padding:48px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#F29A55">ОПОРА 2</p>
+<h3 style="font-family:'Unbounded', Arial, sans-serif;font-size:44px;font-weight:600;color:#F7F5F0">Технології</h3>
+<p style="font-size:28px;line-height:1.4;color:#C9D3E3">Агенти ШІ та сучасні інструменти виконують і прискорюють роботу</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#6A7280">Когнітивні технології · 02</p>
+<aside class="notes">Головна ідея: це не просто «впровадити ШІ». Це посилення людини, яке тримається на двох опорах. Перша — людина, яка хоче і вміє працювати по-новому. Друга — технології, які беруть на себе виконання.</aside>
+</section>
+<section id="motivation" data-transition="fade" style="background:#F7F5F0;color:#14213D;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<p style="position:absolute;top:128px;right:128px;width:760px;font-size:24px;color:#6A7280;text-align:right"><span style="color:#B4561A"><b>1 Мотивація</b></span> · 2 Поведінка · 3 Оцінка</p>
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#B4561A">ОПОРА 1 · ЛЮДИНА</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1;color:#14213D">Мотивація</h2>
+<p style="font-size:32px;color:#4A5568">«Навіщо мені це?»</p>
+</div>
+<div style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:24px">
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">01</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Особиста вигода.</b> Менше рутини, більше часу на важливі задачі, швидше професійне зростання.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">02</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Без страху заміни.</b> ШІ забирає задачі, а не людей. Про це треба сказати прямо.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">03</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Залученість.</b> Люди самі обирають процеси, які автоматизувати першими.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">04</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Визнання.</b> Відзначати й заохочувати тих, хто першим отримав результат.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#6A7280">Когнітивні технології · 03</p>
+<aside class="notes">Без мотивації будь-яка технологія залишиться невикористаною. Людина має побачити особисту вигоду і перестати боятися, що ШІ її замінить.</aside>
+</section>
+<section id="behavior" data-transition="fade" style="background:#F7F5F0;color:#14213D;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<p style="position:absolute;top:128px;right:128px;width:760px;font-size:24px;color:#6A7280;text-align:right">1 Мотивація · <span style="color:#B4561A"><b>2 Поведінка</b></span> · 3 Оцінка</p>
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#B4561A">ОПОРА 1 · ЛЮДИНА</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1;color:#14213D">Поведінка</h2>
+<p style="font-size:32px;color:#4A5568">«Як я працюю тепер?»</p>
+</div>
+<div style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:24px">
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">01</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Нова звичка.</b> Перед задачею питати себе: що делегувати агенту, а що зробити самому?</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">02</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Когнітивні навички.</b> Критичне мислення, чітке формулювання задач, перевірка результатів ШІ, робота з когнітивними викривленнями.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">03</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Навчання на практиці.</b> На реальних робочих задачах, а не на абстрактних курсах.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">04</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Безпечні експерименти.</b> Культура, де помилки на старті — нормальна частина процесу.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#6A7280">Когнітивні технології · 04</p>
+<aside class="notes">Мотивація має перетворитися на нові звички. Головна з них — щоразу думати, яку частину роботи можна делегувати агенту. Водночас треба розвивати власне мислення, щоб критично перевіряти результати ШІ.</aside>
+</section>
+<section id="results" data-transition="fade" style="background:#F7F5F0;color:#14213D;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<p style="position:absolute;top:128px;right:128px;width:760px;font-size:24px;color:#6A7280;text-align:right">1 Мотивація · 2 Поведінка · <span style="color:#B4561A"><b>3 Оцінка</b></span></p>
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#B4561A">ОПОРА 1 · ЛЮДИНА</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1;color:#14213D">Оцінка результату</h2>
+<p style="font-size:32px;color:#4A5568">«Що змінилося?»</p>
+</div>
+<div style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:24px">
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">01</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Результат, а не години.</b> Оцінювати, що зроблено, а не скільки часу витрачено.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">02</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>До і після.</b> Час на задачу, якість, кількість помилок, обсяг виконаної роботи.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">03</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Зворотний зв’язок.</b> Регулярно з’ясовувати, що допомагає, а що заважає.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#B4561A">04</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#14213D"><b>Видимий прогрес.</b> Для самої людини, команди та керівництва.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#6A7280">Когнітивні технології · 05</p>
+<aside class="notes">Що не вимірюється, те не приживається. Зафіксуйте базові показники до старту, тоді ефект буде видно в цифрах. Видимий прогрес сам стає джерелом нової мотивації.</aside>
+</section>
+<section id="levels" data-transition="fade" style="background:#14213D;color:#F7F5F0;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#F29A55">ОПОРА 2 · ТЕХНОЛОГІЇ</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1;color:#F7F5F0">Рівні використання ШІ</h2>
+<p style="font-size:32px;color:#C9D3E3">Що вищий рівень, то більше автономії в агента</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:end">
+<div style="flex:1;min-height:300px;display:flex;flex-direction:column;justify-content:end;gap:12px;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:36px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#F29A55">РІВЕНЬ 1</p>
+<h3 style="font-size:34px;font-weight:800;color:#F7F5F0">Помічник</h3>
+<p style="font-size:26px;line-height:1.35;color:#C9D3E3">Підказує, пише чернетки, пояснює</p>
+<p style="font-size:24px;line-height:1.35;color:#9FB0CC">Лист, аналіз документа, ідеї</p>
+</div>
+<div style="flex:1;min-height:380px;display:flex;flex-direction:column;justify-content:end;gap:12px;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:36px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#F29A55">РІВЕНЬ 2</p>
+<h3 style="font-size:34px;font-weight:800;color:#F7F5F0">Співвиконавець</h3>
+<p style="font-size:26px;line-height:1.35;color:#C9D3E3">Виконує частину задачі, людина перевіряє</p>
+<p style="font-size:24px;line-height:1.35;color:#9FB0CC">Звіт, презентація, аналіз даних</p>
+</div>
+<div style="flex:1;min-height:460px;display:flex;flex-direction:column;justify-content:end;gap:12px;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:36px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#F29A55">РІВЕНЬ 3</p>
+<h3 style="font-size:34px;font-weight:800;color:#F7F5F0">Агент</h3>
+<p style="font-size:26px;line-height:1.35;color:#C9D3E3">Самостійно виконує процес від початку до кінця</p>
+<p style="font-size:24px;line-height:1.35;color:#9FB0CC">Обробка заявок, моніторинг, підготовка документів</p>
+</div>
+<div style="flex:1;min-height:540px;display:flex;flex-direction:column;justify-content:end;gap:12px;background:#F29A55;border-radius:20px;padding:36px">
+<p style="font-size:24px;font-weight:700;letter-spacing:2px;color:#14213D">РІВЕНЬ 4</p>
+<h3 style="font-size:34px;font-weight:800;color:#14213D">Команда агентів</h3>
+<p style="font-size:26px;line-height:1.35;color:#14213D">Кілька агентів ділять складну задачу між собою</p>
+<p style="font-size:24px;line-height:1.35;color:#3A2A1E">Дослідження ринку, супровід проєкту</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#9FB0CC">Когнітивні технології · 06</p>
+<aside class="notes">Друга опора — технології. Впровадження йде сходинками: від помічника, який лише підказує, до команди агентів, що самостійно ведуть складні задачі. Не треба одразу стрибати на четвертий рівень. Кожна сходинка вимагає більшої довіри і кращих правил контролю.</aside>
+</section>
+<section id="tools" data-transition="fade" style="background:#14213D;color:#F7F5F0;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#F29A55">ОПОРА 2 · ТЕХНОЛОГІЇ</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1;color:#F7F5F0">Інструменти</h2>
+<p style="font-size:32px;color:#C9D3E3">Що потрібно, щоб агенти справді працювали</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:row;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:40px">
+<svg width="56px" height="56px" viewBox="0 0 24 24" fill="none" stroke="#F29A55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>
+<div style="flex:1"></div>
+<h3 style="font-size:30px;font-weight:800;line-height:1.2;color:#F7F5F0">ШІ-асистенти та агенти</h3>
+<p style="font-size:26px;line-height:1.35;color:#C9D3E3">LLM та агенти з доступом до пошти, документів і систем</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:40px">
+<svg width="56px" height="56px" viewBox="0 0 24 24" fill="none" stroke="#F29A55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+<div style="flex:1"></div>
+<h3 style="font-size:30px;font-weight:800;line-height:1.2;color:#F7F5F0">Автоматизація процесів</h3>
+<p style="font-size:26px;line-height:1.35;color:#C9D3E3">Інтеграції, тригери, регламентні задачі</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:40px">
+<svg width="56px" height="56px" viewBox="0 0 24 24" fill="none" stroke="#F29A55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+<div style="flex:1"></div>
+<h3 style="font-size:30px;font-weight:800;line-height:1.2;color:#F7F5F0">Бази знань</h3>
+<p style="font-size:26px;line-height:1.35;color:#C9D3E3">ШІ працює на даних компанії, а не на загальних знаннях</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:40px">
+<svg width="56px" height="56px" viewBox="0 0 24 24" fill="none" stroke="#F29A55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/></svg>
+<div style="flex:1"></div>
+<h3 style="font-size:30px;font-weight:800;line-height:1.2;color:#F7F5F0">Аналітика й дашборди</h3>
+<p style="font-size:26px;line-height:1.35;color:#C9D3E3">Щоб вимірювати ефект і бачити прогрес</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#9FB0CC">Когнітивні технології · 07</p>
+<aside class="notes">Агент без доступу до даних і систем компанії — лише співрозмовник. Щоб він виконував роботу, потрібні інтеграції, база знань компанії та аналітика, яка показує ефект.</aside>
+</section>
+<section id="principles" data-transition="fade" style="background:#14213D;color:#F7F5F0;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#F29A55">ОПОРА 2 · ТЕХНОЛОГІЇ</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1;color:#F7F5F0">Принципи впровадження</h2>
+<p style="font-size:32px;color:#C9D3E3">Як не розчаруватися на старті</p>
+</div>
+<div style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:24px">
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#F29A55">01</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#C9D3E3"><b><span style="color:#F7F5F0">Почати з малого.</span></b> 2–3 процеси, де багато рутини і результат легко виміряти.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#F29A55">02</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#C9D3E3"><b><span style="color:#F7F5F0">Людина в контурі.</span></b> Агент виконує, людина ставить мету, перевіряє й відповідає за результат.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#F29A55">03</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#C9D3E3"><b><span style="color:#F7F5F0">Чіткі правила.</span></b> Які дані можна давати ШІ і що обов’язково перевіряє людина.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:start;background:#1E2E52;border:1px solid #2E4170;border-radius:20px;padding:36px 40px">
+<p style="width:72px;font-family:'Unbounded', Arial, sans-serif;font-size:32px;font-weight:600;line-height:1.2;color:#F29A55">04</p>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#C9D3E3"><b><span style="color:#F7F5F0">Масштабувати доведене.</span></b> Поширювати лише те, що показало ефективність у цифрах.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#9FB0CC">Когнітивні технології · 08</p>
+<aside class="notes">Четверо простих правил захищають від типових помилок: занадто великого старту, бездумної довіри до ШІ, витоку даних і масштабування того, що ще не довело свою користь.</aside>
+</section>
+<section id="cycle" data-transition="fade" style="background:#F7F5F0;color:#14213D;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#B4561A">СИНТЕЗ</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.1;color:#14213D">Як дві опори працюють разом</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:28px">
+<p style="font-family:'Unbounded', Arial, sans-serif;font-size:28px;font-weight:600;color:#B4561A">01</p>
+<h3 style="font-size:28px;font-weight:800;color:#14213D">Мотивація</h3>
+<p style="font-size:24px;line-height:1.35;color:#4A5568">Людина хоче пробувати</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#6A7280">Людина</p>
+</div>
+<div style="width:40px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+<svg width="40px" height="22px" viewBox="0 0 40 22" aria-hidden="true"><path d="M0 6h24V0l16 11-16 11v-6H0z" fill="#B4561A"/></svg>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:28px">
+<p style="font-family:'Unbounded', Arial, sans-serif;font-size:28px;font-weight:600;color:#B4561A">02</p>
+<h3 style="font-size:28px;font-weight:800;color:#14213D">Поведінка</h3>
+<p style="font-size:24px;line-height:1.35;color:#4A5568">Вміє делегувати агентам ШІ</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#6A7280">Людина</p>
+</div>
+<div style="width:40px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+<svg width="40px" height="22px" viewBox="0 0 40 22" aria-hidden="true"><path d="M0 6h24V0l16 11-16 11v-6H0z" fill="#B4561A"/></svg>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#14213D;border-radius:20px;padding:28px">
+<p style="font-family:'Unbounded', Arial, sans-serif;font-size:28px;font-weight:600;color:#F29A55">03</p>
+<h3 style="font-size:28px;font-weight:800;color:#F7F5F0">Агенти ШІ</h3>
+<p style="font-size:24px;line-height:1.35;color:#C9D3E3">Виконують рутину, звільняють час</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#9FB0CC">Технології</p>
+</div>
+<div style="width:40px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+<svg width="40px" height="22px" viewBox="0 0 40 22" aria-hidden="true"><path d="M0 6h24V0l16 11-16 11v-6H0z" fill="#B4561A"/></svg>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:28px">
+<p style="font-family:'Unbounded', Arial, sans-serif;font-size:28px;font-weight:600;color:#B4561A">04</p>
+<h3 style="font-size:28px;font-weight:800;color:#14213D">Фокус</h3>
+<p style="font-size:24px;line-height:1.35;color:#4A5568">Людина зосереджена на рішеннях і творчості</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#6A7280">Людина</p>
+</div>
+<div style="width:40px;display:flex;flex-direction:column;justify-content:center;align-items:center">
+<svg width="40px" height="22px" viewBox="0 0 40 22" aria-hidden="true"><path d="M0 6h24V0l16 11-16 11v-6H0z" fill="#B4561A"/></svg>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FDFCF9;border:1px solid #E2DDD2;border-radius:20px;padding:28px">
+<p style="font-family:'Unbounded', Arial, sans-serif;font-size:28px;font-weight:600;color:#B4561A">05</p>
+<h3 style="font-size:28px;font-weight:800;color:#14213D">Оцінка</h3>
+<p style="font-size:24px;line-height:1.35;color:#4A5568">Видимий ефект у цифрах</p>
+<div style="flex:1"></div>
+<p style="font-size:24px;color:#6A7280">Результат</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:row">
+<p style="font-size:28px;font-weight:700;color:#F7F5F0;background:#14213D;padding:20px 36px;border-radius:48px">Видимий ефект запускає нову мотивацію — і цикл повторюється</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#6A7280">Когнітивні технології · 09</p>
+<aside class="notes">Опори не працюють окремо. Мотивація веде до нової поведінки, людина делегує рутину агентам, звільнений час іде на рішення і творчість. Видимий результат знову підсилює мотивацію, і цикл замикається.</aside>
+</section>
+<section id="key" data-transition="fade" style="background:#F29A55;color:#14213D;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#14213D">КЛЮЧОВА ДУМКА</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:60px;font-weight:600;line-height:1.2;color:#14213D">Технології без людини не приживуться. Людина без технологій не отримає приросту.</h2>
+<p style="font-size:36px;font-weight:600;color:#14213D">Результат дає лише поєднання обох опор.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#14213D">Когнітивні технології · 10</p>
+<aside class="notes">Це головний висновок презентації. Якщо компанія купує інструменти, але не працює з людьми, технології не приживуться. Якщо мотивує людей, але не дає їм інструментів, приросту ефективності не буде.</aside>
+</section>
+<section id="formula" data-transition="fade" style="background:#14213D;color:#F7F5F0;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#F29A55">КОРОТКЕ ФОРМУЛЮВАННЯ</p>
+<div style="display:flex;flex-direction:row;gap:48px">
+<div style="width:8px;background:#F29A55;border-radius:4px"></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:32px">
+<p style="font-size:44px;line-height:1.4;color:#F7F5F0">Когнітивні технології — це підхід, у якому <span style="color:#F29A55">мотивована людина</span> з новими навичками мислення та роботи <span style="color:#F29A55">делегує рутину агентам ШІ</span>, а звільнений ресурс спрямовує на рішення, творчість і розвиток.</p>
+<p style="font-size:32px;color:#C9D3E3">Ефект вимірюється конкретним результатом.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#9FB0CC">Когнітивні технології · 11</p>
+<aside class="notes">Одне речення, яке варто запам’ятати: мотивована людина плюс агенти ШІ, а ефект вимірюється результатом.</aside>
+</section>
+<section id="quiz-intro" style="background:#14213D;color:#F7F5F0;font-family:'Manrope', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<p style="font-size:24px;font-weight:700;letter-spacing:3px;color:#F29A55">ПЕРЕВІРТЕ СЕБЕ</p>
+<h2 style="font-family:'Unbounded', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.15;color:#F7F5F0">Квіз: 10 питань<br>за концепцією</h2>
+<p style="width:1200px;font-size:32px;line-height:1.4;color:#C9D3E3">Ситуації з практики впровадження: мотивація, поведінка, оцінка результату, рівні ШІ та принципи. Після кожної відповіді — пояснення.</p>
+<p style="font-size:28px;font-weight:700;color:#F29A55">Далі — квіз →</p>
+<p style="position:absolute;left:128px;bottom:64px;width:800px;font-size:24px;color:#9FB0CC">Когнітивні технології · 12</p>
+<aside class="notes">Запросіть аудиторію пройти квіз. Питання перевіряють розуміння, а не запам’ятовування: більшість — ситуації з практики.</aside>
+</section>
+<section id="quiz" data-quiz style="background:#14213D"></section>
+</div></div>
+<div id="quiz-layer" role="region" aria-label="Квіз">
+  <header><span><b>КВІЗ</b> · Когнітивні технології: концепція впровадження</span></header>
+  <iframe id="quiz-frame" title="Квіз: когнітивні технології" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;uk&quot; dir=&quot;ltr&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;!--
+  Offline quiz page template, Material Design 3 look. Single source of the quiz CSS and JS.
+  Build: python3 tools/build_quiz.py &lt;data.json&gt; -o &lt;out.html&gt; [--lang uk] [--title &quot;...&quot;]
+
+  Placeholders (named here without their delimiters so this comment is never substituted):
+    LANG, DIR           in double curly braces: html lang / dir attributes
+    TITLE               in double curly braces: &lt;title&gt; and &lt;h1&gt; (HTML-escaped)
+    DESCRIPTION         in double curly braces: meta description and subtitle (HTML-escaped, may be empty)
+    QUIZ_DATA           in double underscores: JSON array of questions inside script#quiz-data
+    UI_STRINGS          in double underscores: JSON object of UI strings inside script#quiz-strings
+  JSON values escape the characters &lt; &gt; &amp; and the line/paragraph separators as 6-character \u escapes (\u003c, \u003e, \u0026, \u2028, \u2029).
+  All UI text comes from quiz-strings; the markup below contains no language-specific text.
+--&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;light dark&quot;&gt;
+&lt;meta name=&quot;description&quot; content=&quot;Перевірте, як ви зрозуміли дві опори впровадження: людину і технології&quot;&gt;
+&lt;title&gt;Когнітивні технології: концепція впровадження&lt;/title&gt;
+&lt;style&gt;
+:root {
+  color-scheme: light dark;
+  --md-sys-color-primary: #0b57d0;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #d3e3fd;
+  --md-sys-color-on-primary-container: #041e49;
+  --md-sys-color-secondary: #565e71;
+  --md-sys-color-secondary-container: #dae2f9;
+  --md-sys-color-on-secondary-container: #131c2b;
+  --md-sys-color-surface: #f8f9ff;
+  --md-sys-color-surface-container-low: #f3f4fa;
+  --md-sys-color-surface-container: #edeef4;
+  --md-sys-color-surface-container-high: #e7e8ee;
+  --md-sys-color-on-surface: #1a1b21;
+  --md-sys-color-on-surface-variant: #44474f;
+  --md-sys-color-outline: #74777f;
+  --md-sys-color-outline-variant: #c4c6d0;
+  --md-sys-color-error: #ba1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #ffdad6;
+  --md-sys-color-on-error-container: #410002;
+  --md-sys-color-success: #146c2e;
+  --md-sys-color-success-container: #a6f2b5;
+  --md-sys-color-on-success-container: #002109;
+
+  --md-ref-typeface: Roboto, &quot;Roboto Flex&quot;, system-ui, -apple-system, &quot;Segoe UI&quot;, &quot;Noto Sans&quot;, &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  --md-sys-typescale-display-small-size: 36px;
+  --md-sys-typescale-display-small-line-height: 44px;
+  --md-sys-typescale-display-small-weight: 400;
+  --md-sys-typescale-display-small-tracking: 0;
+  --md-sys-typescale-headline-small-size: 24px;
+  --md-sys-typescale-headline-small-line-height: 32px;
+  --md-sys-typescale-headline-small-weight: 400;
+  --md-sys-typescale-headline-small-tracking: 0;
+  --md-sys-typescale-title-large-size: 22px;
+  --md-sys-typescale-title-large-line-height: 28px;
+  --md-sys-typescale-title-large-weight: 400;
+  --md-sys-typescale-title-large-tracking: 0;
+  --md-sys-typescale-title-medium-size: 16px;
+  --md-sys-typescale-title-medium-line-height: 24px;
+  --md-sys-typescale-title-medium-weight: 500;
+  --md-sys-typescale-title-medium-tracking: 0.15px;
+  --md-sys-typescale-body-large-size: 16px;
+  --md-sys-typescale-body-large-line-height: 24px;
+  --md-sys-typescale-body-large-weight: 400;
+  --md-sys-typescale-body-large-tracking: 0.5px;
+  --md-sys-typescale-body-medium-size: 14px;
+  --md-sys-typescale-body-medium-line-height: 20px;
+  --md-sys-typescale-body-medium-weight: 400;
+  --md-sys-typescale-body-medium-tracking: 0.25px;
+  --md-sys-typescale-label-large-size: 14px;
+  --md-sys-typescale-label-large-line-height: 20px;
+  --md-sys-typescale-label-large-weight: 500;
+  --md-sys-typescale-label-large-tracking: 0.1px;
+  --md-sys-typescale-label-medium-size: 12px;
+  --md-sys-typescale-label-medium-line-height: 16px;
+  --md-sys-typescale-label-medium-weight: 500;
+  --md-sys-typescale-label-medium-tracking: 0.5px;
+  --md-sys-typescale-label-small-size: 11px;
+  --md-sys-typescale-label-small-line-height: 16px;
+  --md-sys-typescale-label-small-weight: 500;
+  --md-sys-typescale-label-small-tracking: 0.5px;
+
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1: 0 1px 2px rgba(0,0,0,.3), 0 1px 3px 1px rgba(0,0,0,.15);
+  --md-sys-elevation-level2: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15);
+  --md-sys-elevation-level3: 0 4px 8px 3px rgba(0,0,0,.15), 0 1px 3px rgba(0,0,0,.3);
+
+  --md-sys-state-hover-opacity: 0.08;
+  --md-sys-state-focus-opacity: 0.10;
+  --md-sys-state-pressed-opacity: 0.10;
+
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-duration-short: 150ms;
+  --md-sys-motion-duration-medium: 250ms;
+
+  --content-max: 720px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --md-sys-color-primary: #a8c7fa;
+    --md-sys-color-on-primary: #062e6f;
+    --md-sys-color-primary-container: #0842a0;
+    --md-sys-color-on-primary-container: #d3e3fd;
+    --md-sys-color-secondary: #bec6dc;
+    --md-sys-color-secondary-container: #3e4759;
+    --md-sys-color-on-secondary-container: #dae2f9;
+    --md-sys-color-surface: #111318;
+    --md-sys-color-surface-container-low: #1a1b21;
+    --md-sys-color-surface-container: #1e1f25;
+    --md-sys-color-surface-container-high: #282a2f;
+    --md-sys-color-on-surface: #e2e2e9;
+    --md-sys-color-on-surface-variant: #c4c6d0;
+    --md-sys-color-outline: #8e9099;
+    --md-sys-color-outline-variant: #44474f;
+    --md-sys-color-error: #ffb4ab;
+    --md-sys-color-on-error: #690005;
+    --md-sys-color-error-container: #93000a;
+    --md-sys-color-on-error-container: #ffdad6;
+    --md-sys-color-success: #7dd99a;
+    --md-sys-color-success-container: #0f5223;
+    --md-sys-color-on-success-container: #a6f2b5;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--app-bar-height, 120px) + 16px); scroll-padding-bottom: 16px; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-ref-typeface);
+  font-size: var(--md-sys-typescale-body-large-size);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
+  overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ol { margin: 0; }
+button, summary { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.wrap { width: 100%; max-width: calc(var(--content-max) + 32px); margin-inline: auto; padding-inline: 16px; }
+
+/* Typescale helpers */
+.display-small { font-size: var(--md-sys-typescale-display-small-size); line-height: var(--md-sys-typescale-display-small-line-height); font-weight: var(--md-sys-typescale-display-small-weight); letter-spacing: var(--md-sys-typescale-display-small-tracking); }
+.headline-small { font-size: var(--md-sys-typescale-headline-small-size); line-height: var(--md-sys-typescale-headline-small-line-height); font-weight: var(--md-sys-typescale-headline-small-weight); letter-spacing: var(--md-sys-typescale-headline-small-tracking); }
+.title-large { font-size: var(--md-sys-typescale-title-large-size); line-height: var(--md-sys-typescale-title-large-line-height); font-weight: var(--md-sys-typescale-title-large-weight); letter-spacing: var(--md-sys-typescale-title-large-tracking); }
+.title-medium { font-size: var(--md-sys-typescale-title-medium-size); line-height: var(--md-sys-typescale-title-medium-line-height); font-weight: var(--md-sys-typescale-title-medium-weight); letter-spacing: var(--md-sys-typescale-title-medium-tracking); }
+.body-large { font-size: var(--md-sys-typescale-body-large-size); line-height: var(--md-sys-typescale-body-large-line-height); font-weight: var(--md-sys-typescale-body-large-weight); letter-spacing: var(--md-sys-typescale-body-large-tracking); }
+.body-medium { font-size: var(--md-sys-typescale-body-medium-size); line-height: var(--md-sys-typescale-body-medium-line-height); font-weight: var(--md-sys-typescale-body-medium-weight); letter-spacing: var(--md-sys-typescale-body-medium-tracking); }
+.label-large { font-size: var(--md-sys-typescale-label-large-size); line-height: var(--md-sys-typescale-label-large-line-height); font-weight: var(--md-sys-typescale-label-large-weight); letter-spacing: var(--md-sys-typescale-label-large-tracking); }
+.label-medium { font-size: var(--md-sys-typescale-label-medium-size); line-height: var(--md-sys-typescale-label-medium-line-height); font-weight: var(--md-sys-typescale-label-medium-weight); letter-spacing: var(--md-sys-typescale-label-medium-tracking); }
+.label-small { font-size: var(--md-sys-typescale-label-small-size); line-height: var(--md-sys-typescale-label-small-line-height); font-weight: var(--md-sys-typescale-label-small-weight); letter-spacing: var(--md-sys-typescale-label-small-tracking); }
+
+/* Small top app bar */
+.top-app-bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--md-sys-color-surface);
+  transition: background-color var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard),
+              box-shadow var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
+}
+.top-app-bar.is-scrolled { background: var(--md-sys-color-surface-container); box-shadow: var(--md-sys-elevation-level2); }
+.bar-row { display: flex; align-items: center; gap: 12px; min-height: 64px; padding-block: 8px; }
+.bar-title {
+  flex: 1 1 auto; min-width: 0;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+  overflow-wrap: break-word;
+}
+.bar-chips { display: flex; flex-wrap: wrap; gap: 8px; padding-block-end: 12px; }
+@media (max-width: 599px) {
+  .bar-row { min-height: 56px; }
+  .bar-title { font-size: 18px; line-height: 24px; }
+  .bar-row .badge, .bar-chips #chip-total { display: none; }
+  .bar-chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 6px; padding-block-end: 10px; margin-inline-end: -16px; padding-inline-end: 16px; }
+  .bar-chips::-webkit-scrollbar { display: none; }
+  .bar-chips .chip { flex: none; height: 28px; padding-inline: 8px; }
+}
+
+/* Chips (assist chip / badge) */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding-inline: 12px;
+  border-radius: var(--md-sys-shape-corner-small);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+  white-space: nowrap;
+}
+.chip-tonal { border-color: transparent; background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+.chip-strong { color: var(--md-sys-color-on-surface); }
+.badge { flex: none; }
+
+/* Linear progress indicator (determinate) */
+.progress { height: 4px; background: var(--md-sys-color-secondary-container); border-radius: var(--md-sys-shape-corner-full); overflow: hidden; }
+.progress-indicator {
+  height: 100%; width: 0; background: var(--md-sys-color-primary); border-radius: inherit;
+  transition: width var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
+}
+
+main { flex: 1 0 auto; padding-block: 16px 32px; }
+.subtitle { color: var(--md-sys-color-on-surface-variant); margin-block-end: 16px; }
+.subtitle:empty { display: none; }
+
+/* Cards */
+.card { border-radius: var(--md-sys-shape-corner-large); padding: 20px; }
+.card-elevated { background: var(--md-sys-color-surface-container-low); box-shadow: var(--md-sys-elevation-level1); }
+@media (min-width: 600px) { .card { padding: 24px; } }
+.enter { animation: enter var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard); }
+@keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.q-heading { outline: none; scroll-margin-top: calc(var(--app-bar-height, 120px) + 16px); }
+.q-title { display: block; color: var(--md-sys-color-primary); margin-block-end: 4px; }
+.q-text { display: block; font-weight: 400; }
+@media (min-width: 600px) {
+  .q-text { font-size: var(--md-sys-typescale-headline-small-size); line-height: var(--md-sys-typescale-headline-small-line-height); letter-spacing: var(--md-sys-typescale-headline-small-tracking); }
+}
+
+/* State layers */
+.state { position: relative; isolation: isolate; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.state::before {
+  content: &quot;&quot;; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+  background: currentColor; opacity: 0; pointer-events: none;
+  transition: opacity var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+}
+@media (hover: hover) { .state:hover:not(:disabled)::before { opacity: var(--md-sys-state-hover-opacity); } }
+.state:focus-visible:not(:disabled)::before { opacity: var(--md-sys-state-focus-opacity); }
+.state:active:not(:disabled)::before { opacity: var(--md-sys-state-pressed-opacity); }
+.state:focus-visible { outline: 3px solid var(--md-sys-color-secondary); outline-offset: 2px; }
+
+/* Options: outlined cards as buttons */
+.options { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 12px; }
+.option {
+  width: 100%; min-height: 56px; min-width: 48px;
+  display: flex; align-items: center; gap: 16px;
+  padding-block: 12px; padding-inline: 12px 16px;
+  text-align: start;
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  transition: background-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+              border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+}
+.option-num {
+  flex: none; display: inline-grid; place-items: center;
+  width: 32px; height: 32px; border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container);
+}
+.option-text { flex: 1 1 auto; min-width: 0; }
+.option-icon { flex: none; width: 24px; height: 24px; display: none; }
+.option-icon svg, .icon svg { display: block; width: 100%; height: 100%; fill: currentColor; }
+.option:disabled { cursor: default; }
+.option:disabled:not(.is-correct):not(.is-wrong) &gt; * { opacity: 0.38; }
+.option.is-correct { background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container); border: 2px solid var(--md-sys-color-success); padding-block: 11px; padding-inline: 11px 15px; }
+.option.is-wrong { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); border: 2px solid var(--md-sys-color-error); padding-block: 11px; padding-inline: 11px 15px; }
+.option.is-correct .option-num { background: var(--md-sys-color-success); color: var(--md-sys-color-success-container); }
+.option.is-wrong .option-num { background: var(--md-sys-color-error); color: var(--md-sys-color-error-container); }
+.option.is-correct .option-icon, .option.is-wrong .option-icon { display: block; }
+
+.kbd-hint { margin-block-start: 12px; color: var(--md-sys-color-on-surface-variant); }
+@media (hover: none) { .kbd-hint { display: none; } }
+
+/* Feedback: filled card inside a persistent live region */
+.feedback-region:not(:empty) { margin-block-start: 16px; }
+.feedback {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 16px; border-radius: var(--md-sys-shape-corner-medium);
+}
+.feedback.is-correct { background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container); }
+.feedback.is-wrong { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
+.icon { flex: none; width: 24px; height: 24px; }
+.feedback-body { display: grid; gap: 4px; min-width: 0; }
+
+/* Buttons */
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-block-start: 20px; }
+.actions .spacer { flex: 1 1 auto; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; min-width: 48px; padding-inline: 24px;
+  border: 0; border-radius: var(--md-sys-shape-corner-full);
+  text-align: center;
+  font-size: var(--md-sys-typescale-label-large-size); line-height: var(--md-sys-typescale-label-large-line-height);
+  font-weight: var(--md-sys-typescale-label-large-weight); letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  transition: box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+}
+.btn-filled { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+@media (hover: hover) { .btn-filled:hover:not(:disabled) { box-shadow: var(--md-sys-elevation-level1); } }
+.btn-tonal { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+.btn-outlined { background: transparent; color: var(--md-sys-color-primary); border: 1px solid var(--md-sys-color-outline); }
+.btn-text { background: transparent; color: var(--md-sys-color-primary); padding-inline: 12px; }
+.btn:disabled { cursor: default; background: transparent; color: var(--md-sys-color-on-surface); box-shadow: none; }
+.btn:disabled &gt; * { opacity: 0.38; }
+.btn-filled:disabled::after, .btn-tonal:disabled::after {
+  content: &quot;&quot;; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--md-sys-color-on-surface); opacity: 0.12;
+}
+@media (max-width: 599px) {
+  .actions .btn { flex: 1 1 auto; padding-inline: 16px; }
+  .actions .spacer { display: none; }
+}
+
+/* Result */
+.result { text-align: center; }
+.result-title { outline: none; width: fit-content; margin-inline: auto; padding-inline: 8px; }
+.result-percent { color: var(--md-sys-color-primary); margin-block: 16px 4px; }
+.result-comment { color: var(--md-sys-color-on-surface-variant); margin-block-start: 8px; }
+.result .actions { justify-content: center; }
+
+.review { margin-block-start: 16px; text-align: start; }
+.review &gt; summary {
+  list-style: none; display: flex; width: fit-content; margin-inline: auto;
+  align-items: center; border-radius: var(--md-sys-shape-corner-full);
+}
+.review &gt; summary::-webkit-details-marker { display: none; }
+.review &gt; summary .chevron { width: 18px; height: 18px; transition: transform var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard); }
+.review[open] &gt; summary .chevron { transform: rotate(180deg); }
+.review-list { padding: 0; margin: 16px 0 0; list-style: none; display: grid; gap: 12px; counter-reset: review; }
+.review-item {
+  counter-increment: review;
+  border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-sys-shape-corner-medium);
+  padding: 16px; display: grid; gap: 8px;
+}
+.review-head { display: flex; gap: 12px; align-items: baseline; }
+.review-head::before { content: counter(review); flex: none; min-width: 24px; color: var(--md-sys-color-on-surface-variant); font-size: var(--md-sys-typescale-label-large-size); font-weight: 500; }
+.review-head &gt; div { min-width: 0; }
+.review-answer { display: flex; gap: 8px; align-items: flex-start; padding: 8px 12px; border-radius: var(--md-sys-shape-corner-small); }
+.review-answer.is-correct { background: var(--md-sys-color-success-container); color: var(--md-sys-color-on-success-container); }
+.review-answer.is-wrong { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
+.review-answer .icon { width: 20px; height: 20px; margin-block-start: 2px; }
+.review-answer-label { display: block; }
+.muted { color: var(--md-sys-color-on-surface-variant); }
+
+footer { padding-block: 16px 24px; color: var(--md-sys-color-on-surface-variant); text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header class=&quot;top-app-bar&quot; id=&quot;app-bar&quot;&gt;
+  &lt;div class=&quot;wrap&quot;&gt;
+    &lt;div class=&quot;bar-row&quot;&gt;
+      &lt;h1 class=&quot;bar-title title-large&quot;&gt;Когнітивні технології: концепція впровадження&lt;/h1&gt;
+      &lt;span class=&quot;chip chip-tonal badge label-medium&quot; data-string=&quot;badge&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;bar-chips label-medium&quot;&gt;
+      &lt;span class=&quot;chip chip-strong&quot; id=&quot;chip-counter&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;chip&quot; id=&quot;chip-score&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;chip&quot; id=&quot;chip-answered&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;chip&quot; id=&quot;chip-total&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;wrap&quot;&gt;
+    &lt;div class=&quot;progress&quot; id=&quot;progress&quot; role=&quot;progressbar&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;0&quot; aria-valuenow=&quot;0&quot;&gt;
+      &lt;div class=&quot;progress-indicator&quot; id=&quot;progress-indicator&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;wrap&quot;&gt;
+  &lt;p class=&quot;subtitle body-medium&quot;&gt;Перевірте, як ви зрозуміли дві опори впровадження: людину і технології&lt;/p&gt;
+
+  &lt;section id=&quot;quiz&quot; aria-labelledby=&quot;q-heading&quot;&gt;
+    &lt;article class=&quot;card card-elevated&quot; id=&quot;q-card&quot;&gt;
+      &lt;h2 class=&quot;q-heading&quot; id=&quot;q-heading&quot; tabindex=&quot;-1&quot;&gt;
+        &lt;span class=&quot;q-title title-medium&quot; id=&quot;q-title&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;q-text body-large&quot; id=&quot;q-text&quot;&gt;&lt;/span&gt;
+      &lt;/h2&gt;
+      &lt;ol class=&quot;options&quot; id=&quot;options&quot;&gt;&lt;/ol&gt;
+      &lt;p class=&quot;kbd-hint label-small&quot; id=&quot;kbd-hint&quot;&gt;&lt;/p&gt;
+      &lt;div class=&quot;feedback-region&quot; id=&quot;feedback&quot; role=&quot;status&quot; aria-live=&quot;polite&quot; aria-atomic=&quot;true&quot;&gt;&lt;/div&gt;
+    &lt;/article&gt;
+    &lt;div class=&quot;actions&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;btn btn-outlined state&quot; id=&quot;btn-restart-during&quot;&gt;&lt;span data-string=&quot;restartDuring&quot;&gt;&lt;/span&gt;&lt;/button&gt;
+      &lt;span class=&quot;spacer&quot;&gt;&lt;/span&gt;
+      &lt;button type=&quot;button&quot; class=&quot;btn btn-filled state&quot; id=&quot;btn-next&quot; disabled&gt;&lt;span id=&quot;btn-next-label&quot;&gt;&lt;/span&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section id=&quot;result&quot; hidden&gt;
+    &lt;article class=&quot;card card-elevated result&quot;&gt;
+      &lt;h2 class=&quot;result-title headline-small&quot; id=&quot;result-title&quot; tabindex=&quot;-1&quot; data-string=&quot;resultTitle&quot;&gt;&lt;/h2&gt;
+      &lt;p class=&quot;result-percent display-small&quot; id=&quot;result-percent&quot;&gt;&lt;/p&gt;
+      &lt;p class=&quot;body-large&quot; id=&quot;result-summary&quot;&gt;&lt;/p&gt;
+      &lt;p class=&quot;result-comment body-medium&quot; id=&quot;result-comment&quot;&gt;&lt;/p&gt;
+      &lt;div class=&quot;actions&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-tonal state&quot; id=&quot;btn-restart&quot;&gt;&lt;span data-string=&quot;restart&quot;&gt;&lt;/span&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;details class=&quot;review&quot; id=&quot;review&quot;&gt;
+        &lt;summary class=&quot;btn btn-text state&quot;&gt;&lt;span data-string=&quot;reviewToggle&quot;&gt;&lt;/span&gt;&lt;span class=&quot;chevron icon&quot; data-icon=&quot;expand&quot;&gt;&lt;/span&gt;&lt;/summary&gt;
+        &lt;ol class=&quot;review-list&quot; id=&quot;review-list&quot;&gt;&lt;/ol&gt;
+      &lt;/details&gt;
+    &lt;/article&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+
+&lt;footer class=&quot;wrap label-small&quot;&gt;&lt;p data-string=&quot;footer&quot;&gt;&lt;/p&gt;&lt;/footer&gt;
+
+&lt;template id=&quot;icons&quot;&gt;
+  &lt;svg data-name=&quot;check&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z&quot;/&gt;&lt;/svg&gt;
+  &lt;svg data-name=&quot;close&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z&quot;/&gt;&lt;/svg&gt;
+  &lt;svg data-name=&quot;expand&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;&lt;path d=&quot;M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z&quot;/&gt;&lt;/svg&gt;
+&lt;/template&gt;
+
+&lt;script type=&quot;application/json&quot; id=&quot;quiz-data&quot;&gt;[{&quot;title&quot;: &quot;Дві опори&quot;, &quot;question&quot;: &quot;На яких двох опорах, згідно з концепцією, тримається впровадження когнітивних технологій?&quot;, &quot;options&quot;: [&quot;На централізованому ІТ-відділі та єдиній корпоративній платформі ШІ&quot;, &quot;На людині, яка хоче і вміє працювати по-новому, та на технологіях&quot;, &quot;На бюджеті для ліцензій ШІ та на зовнішніх консультантах з автоматизації&quot;], &quot;correct&quot;: 1, &quot;feedback&quot;: &quot;Концепція описує системне посилення людини: перша опора — мотивована людина з новими навичками, друга — агенти ШІ та інструменти, які виконують і прискорюють роботу.&quot;}, {&quot;title&quot;: &quot;Ліцензії без ефекту&quot;, &quot;question&quot;: &quot;Компанія купила ліцензії ШІ для всіх працівників, але через три місяці ними майже ніхто не користується. Що, згідно з концепцією, пропустили?&quot;, &quot;options&quot;: [&quot;Роботу з першою опорою: мотивацію, нові звички й оцінку результату&quot;, &quot;Перехід на складніший рівень — команду агентів замість помічника&quot;, &quot;Розширення переліку інструментів, щоб кожен знайшов зручний для себе&quot;], &quot;correct&quot;: 0, &quot;feedback&quot;: &quot;Технології без людини не приживуться: без особистої вигоди, нових звичок і видимого результату інструменти залишаються невикористаними.&quot;}, {&quot;title&quot;: &quot;Страх заміни&quot;, &quot;question&quot;: &quot;Співробітники неохоче беруть участь у пілоті, бо бояться втратити роботу через ШІ. Яка дія відповідає концепції?&quot;, &quot;options&quot;: [&quot;Не обговорювати цю тему, щоб не посилювати тривогу, і продовжити пілот&quot;, &quot;Запровадити обов’язкові норми використання ШІ з контролем від керівника&quot;, &quot;Прямо пояснити, що ШІ забирає задачі, а не людей, і показати особисту вигоду&quot;], &quot;correct&quot;: 2, &quot;feedback&quot;: &quot;Мотивація починається з відповіді на питання «навіщо мені це». Чесна розмова про страх заміни і показ особистої вигоди знімають опір.&quot;}, {&quot;title&quot;: &quot;Ключова звичка&quot;, &quot;question&quot;: &quot;Яка нова звичка, згідно з концепцією, найкраще показує зміну робочої поведінки?&quot;, &quot;options&quot;: [&quot;Перевіряти кожну задачу у ШІ вже після того, як її виконано вручну&quot;, &quot;Перед задачею питати себе, що делегувати агенту, а що зробити самому&quot;, &quot;Звертатися до ШІ лише тоді, коли керівник прямо доручив це зробити&quot;], &quot;correct&quot;: 1, &quot;feedback&quot;: &quot;Поведінка змінюється, коли делегування стає першим кроком: людина з самого початку розподіляє роботу між собою і агентом, а не додає ШІ наприкінці.&quot;}, {&quot;title&quot;: &quot;Критичне мислення&quot;, &quot;question&quot;: &quot;Чому серед когнітивних навичок концепція називає перевірку результатів ШІ і роботу з когнітивними викривленнями?&quot;, &quot;options&quot;: [&quot;Бо людина відповідає за результат і має критично оцінювати роботу агента&quot;, &quot;Бо так співробітник швидше переходить до роботи з командою агентів&quot;, &quot;Бо ці навички замінюють потребу в базі знань і даних компанії&quot;], &quot;correct&quot;: 0, &quot;feedback&quot;: &quot;Агент виконує, але відповідальність лишається за людиною. Тому їй потрібні навички, які допомагають помітити помилку ШІ і власне упередження.&quot;}, {&quot;title&quot;: &quot;Доказ ефекту&quot;, &quot;question&quot;: &quot;Керівник хоче показати, що пілот з агентом для обробки заявок справді працює. Який підхід відповідає концепції?&quot;, &quot;options&quot;: [&quot;Порахувати, скільки годин співробітники провели в інструменті ШІ&quot;, &quot;Зібрати відгуки про те, наскільки інструмент сподобався команді&quot;, &quot;Порівняти час на задачу, якість і кількість помилок до і після запуску&quot;], &quot;correct&quot;: 2, &quot;feedback&quot;: &quot;Концепція оцінює результат, а не витрачені години. Порівняння ключових показників до і після впровадження показує реальний ефект.&quot;}, {&quot;title&quot;: &quot;Рівень ШІ&quot;, &quot;question&quot;: &quot;Система щодня сама приймає заявки клієнтів, сортує їх і готує відповіді, виконуючи процес від початку до кінця. Який це рівень використання ШІ?&quot;, &quot;options&quot;: [&quot;Помічник&quot;, &quot;Співвиконавець&quot;, &quot;Агент&quot;], &quot;correct&quot;: 2, &quot;feedback&quot;: &quot;Агент самостійно веде весь процес від початку до кінця. Помічник лише підказує, а співвиконавець робить частину задачі, яку перевіряє людина.&quot;}, {&quot;title&quot;: &quot;Загальні відповіді&quot;, &quot;question&quot;: &quot;Агент відповідає клієнтам загальними фразами і не враховує правил компанії. Чого, найімовірніше, бракує?&quot;, &quot;options&quot;: [&quot;Аналітики й дашбордів, які вимірюють ефект роботи агента&quot;, &quot;Бази знань, щоб агент працював на даних самої компанії&quot;, &quot;Тригерів, які запускають регламентні задачі за розкладом&quot;], &quot;correct&quot;: 1, &quot;feedback&quot;: &quot;База знань дає агенту доступ до даних і правил компанії. Без неї він спирається лише на загальні знання моделі.&quot;}, {&quot;title&quot;: &quot;Старт впровадження&quot;, &quot;question&quot;: &quot;Компанія хоче одразу автоматизувати всі 40 своїх процесів. Що радить концепція?&quot;, &quot;options&quot;: [&quot;Почати з 2–3 процесів, де багато рутини і результат легко виміряти&quot;, &quot;Почати з найскладнішого процесу, щоб одразу показати великий ефект&quot;, &quot;Запустити всі процеси паралельно, а неефективні вимкнути згодом&quot;], &quot;correct&quot;: 0, &quot;feedback&quot;: &quot;Малий старт на рутинних і вимірюваних процесах швидко дає доказ ефекту. Масштабувати варто лише те, що довело свою користь цифрами.&quot;}, {&quot;title&quot;: &quot;Людина в контурі&quot;, &quot;question&quot;: &quot;Що означає принцип «людина в контурі»?&quot;, &quot;options&quot;: [&quot;Людина виконує роботу, а агент лише фіксує її хід для звітності&quot;, &quot;Агент виконує, а людина ставить мету, перевіряє й відповідає за результат&quot;, &quot;Агент працює сам, а людина раз на місяць отримує підсумковий звіт&quot;], &quot;correct&quot;: 1, &quot;feedback&quot;: &quot;Принцип розподіляє ролі: виконання делеговано агенту, а мета, контроль якості й відповідальність лишаються за людиною.&quot;}]&lt;/script&gt;
+&lt;script type=&quot;application/json&quot; id=&quot;quiz-strings&quot;&gt;{&quot;badge&quot;: &quot;Інтерактивний квіз&quot;, &quot;questionCounter&quot;: &quot;Питання {current} з {total}&quot;, &quot;scoreLabel&quot;: &quot;Бали: {score}&quot;, &quot;totalLabel&quot;: &quot;Питань: {total}&quot;, &quot;answeredLabel&quot;: &quot;Відповіли: {answered}&quot;, &quot;progressLabel&quot;: &quot;Прогрес квізу&quot;, &quot;optionAria&quot;: &quot;Варіант {n}: {text}&quot;, &quot;next&quot;: &quot;Наступне питання&quot;, &quot;showResult&quot;: &quot;Показати результат&quot;, &quot;correct&quot;: &quot;Правильно&quot;, &quot;incorrect&quot;: &quot;Неправильно&quot;, &quot;correctMark&quot;: &quot;правильна відповідь&quot;, &quot;incorrectMark&quot;: &quot;ваша відповідь, неправильна&quot;, &quot;correctAnswerIs&quot;: &quot;Правильна відповідь: {answer}&quot;, &quot;feedbackRegion&quot;: &quot;Пояснення до відповіді&quot;, &quot;keyboardHint&quot;: &quot;Клавіші 1–{max} — вибір відповіді, Enter — далі&quot;, &quot;resultTitle&quot;: &quot;Результат&quot;, &quot;resultSummary&quot;: &quot;Правильних відповідей: {score} з {total}&quot;, &quot;comment90&quot;: &quot;Відмінний результат! Матеріал засвоєно впевнено.&quot;, &quot;comment70&quot;: &quot;Добрий результат. Перегляньте питання з помилками.&quot;, &quot;comment50&quot;: &quot;Непогано, але варто ще попрактикуватися.&quot;, &quot;commentLow&quot;: &quot;Радимо повторити матеріал і пройти квіз ще раз.&quot;, &quot;restart&quot;: &quot;Пройти ще раз&quot;, &quot;restartDuring&quot;: &quot;Почати спочатку&quot;, &quot;reviewToggle&quot;: &quot;Переглянути відповіді&quot;, &quot;reviewYourAnswer&quot;: &quot;Ваша відповідь&quot;, &quot;reviewCorrectAnswer&quot;: &quot;Правильна відповідь&quot;, &quot;quizRegion&quot;: &quot;Питання квізу&quot;, &quot;resultRegion&quot;: &quot;Результат квізу&quot;, &quot;footer&quot;: &quot;Офлайн-квіз в одному файлі&quot;}&lt;/script&gt;
+&lt;script&gt;
+(function () {
+  &#x27;use strict&#x27;;
+
+  var questions = JSON.parse(document.getElementById(&#x27;quiz-data&#x27;).textContent);
+  var S = JSON.parse(document.getElementById(&#x27;quiz-strings&#x27;).textContent);
+
+  function $(id) { return document.getElementById(id); }
+  function fill(key, vars) {
+    var text = String(S[key] == null ? &#x27;&#x27; : S[key]);
+    Object.keys(vars || {}).forEach(function (name) {
+      text = text.split(&#x27;{&#x27; + name + &#x27;}&#x27;).join(String(vars[name]));
+    });
+    return text;
+  }
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+  var iconTemplate = $(&#x27;icons&#x27;).content;
+  function icon(name, className) {
+    var wrap = el(&#x27;span&#x27;, className || &#x27;icon&#x27;);
+    wrap.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+    wrap.appendChild(iconTemplate.querySelector(&#x27;[data-name=&quot;&#x27; + name + &#x27;&quot;]&#x27;).cloneNode(true));
+    return wrap;
+  }
+  function restartAnimation(node) {
+    node.classList.remove(&#x27;enter&#x27;);
+    void node.offsetWidth;
+    node.classList.add(&#x27;enter&#x27;);
+  }
+
+  var ui = {
+    appBar: $(&#x27;app-bar&#x27;),
+    counter: $(&#x27;chip-counter&#x27;), score: $(&#x27;chip-score&#x27;), answered: $(&#x27;chip-answered&#x27;), total: $(&#x27;chip-total&#x27;),
+    progress: $(&#x27;progress&#x27;), progressIndicator: $(&#x27;progress-indicator&#x27;),
+    quiz: $(&#x27;quiz&#x27;), card: $(&#x27;q-card&#x27;), heading: $(&#x27;q-heading&#x27;), title: $(&#x27;q-title&#x27;), text: $(&#x27;q-text&#x27;),
+    options: $(&#x27;options&#x27;), hint: $(&#x27;kbd-hint&#x27;), feedback: $(&#x27;feedback&#x27;),
+    next: $(&#x27;btn-next&#x27;), nextLabel: $(&#x27;btn-next-label&#x27;), restartDuring: $(&#x27;btn-restart-during&#x27;),
+    result: $(&#x27;result&#x27;), resultTitle: $(&#x27;result-title&#x27;), percent: $(&#x27;result-percent&#x27;),
+    summary: $(&#x27;result-summary&#x27;), comment: $(&#x27;result-comment&#x27;), restart: $(&#x27;btn-restart&#x27;),
+    review: $(&#x27;review&#x27;), reviewList: $(&#x27;review-list&#x27;)
+  };
+
+  var total = questions.length;
+  var state;
+
+  function reset() {
+    state = { index: 0, score: 0, answers: new Array(total).fill(null) };
+  }
+
+  function answeredCount() {
+    return state.answers.filter(function (a) { return a !== null; }).length;
+  }
+
+  function applyStaticStrings() {
+    Array.prototype.forEach.call(document.querySelectorAll(&#x27;[data-string]&#x27;), function (node) {
+      node.textContent = fill(node.getAttribute(&#x27;data-string&#x27;));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(&#x27;[data-icon]&#x27;), function (node) {
+      node.appendChild(iconTemplate.querySelector(&#x27;[data-name=&quot;&#x27; + node.getAttribute(&#x27;data-icon&#x27;) + &#x27;&quot;]&#x27;).cloneNode(true));
+    });
+    ui.quiz.setAttribute(&#x27;aria-label&#x27;, fill(&#x27;quizRegion&#x27;));
+    ui.quiz.removeAttribute(&#x27;aria-labelledby&#x27;);
+    ui.result.setAttribute(&#x27;aria-label&#x27;, fill(&#x27;resultRegion&#x27;));
+    ui.progress.setAttribute(&#x27;aria-label&#x27;, fill(&#x27;progressLabel&#x27;));
+    ui.progress.setAttribute(&#x27;aria-valuemax&#x27;, String(total));
+    ui.feedback.setAttribute(&#x27;aria-label&#x27;, fill(&#x27;feedbackRegion&#x27;));
+  }
+
+  function updateStatus() {
+    var answered = answeredCount();
+    ui.counter.textContent = fill(&#x27;questionCounter&#x27;, { current: Math.min(state.index + 1, total), total: total });
+    ui.score.textContent = fill(&#x27;scoreLabel&#x27;, { score: state.score });
+    ui.answered.textContent = fill(&#x27;answeredLabel&#x27;, { answered: answered });
+    ui.total.textContent = fill(&#x27;totalLabel&#x27;, { total: total });
+    ui.progress.setAttribute(&#x27;aria-valuenow&#x27;, String(answered));
+    ui.progressIndicator.style.width = (total ? (answered / total) * 100 : 0) + &#x27;%&#x27;;
+  }
+
+  function optionButtons() {
+    return Array.prototype.slice.call(ui.options.querySelectorAll(&#x27;.option&#x27;));
+  }
+
+  function renderQuestion() {
+    var q = questions[state.index];
+    ui.title.textContent = q.title;
+    ui.text.textContent = q.question;
+    ui.options.textContent = &#x27;&#x27;;
+    q.options.forEach(function (optionText, i) {
+      var item = el(&#x27;li&#x27;);
+      var button = el(&#x27;button&#x27;, &#x27;option state body-large&#x27;);
+      button.type = &#x27;button&#x27;;
+      var ariaParts = String(S.optionAria == null ? &#x27;&#x27; : S.optionAria).split(&#x27;{text}&#x27;);
+      var num = el(&#x27;span&#x27;, &#x27;option-num label-large&#x27;, String(i + 1));
+      num.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+      button.appendChild(num);
+      button.appendChild(el(&#x27;span&#x27;, &#x27;sr-only&#x27;, ariaParts[0].split(&#x27;{n}&#x27;).join(String(i + 1))));
+      button.appendChild(el(&#x27;span&#x27;, &#x27;option-text&#x27;, optionText));
+      button.appendChild(el(&#x27;span&#x27;, &#x27;sr-only&#x27;, ariaParts.slice(1).join(optionText).split(&#x27;{n}&#x27;).join(String(i + 1))));
+      button.appendChild(el(&#x27;span&#x27;, &#x27;option-mark sr-only&#x27;));
+      button.addEventListener(&#x27;click&#x27;, function () { choose(i); });
+      item.appendChild(button);
+      ui.options.appendChild(item);
+    });
+    ui.hint.textContent = fill(&#x27;keyboardHint&#x27;, { max: q.options.length });
+    ui.feedback.textContent = &#x27;&#x27;;
+    ui.next.disabled = true;
+    ui.nextLabel.textContent = fill(state.index === total - 1 ? &#x27;showResult&#x27; : &#x27;next&#x27;);
+    updateStatus();
+    restartAnimation(ui.card);
+  }
+
+  function markOption(button, kind) {
+    var isCorrect = kind === &#x27;correct&#x27;;
+    button.classList.add(isCorrect ? &#x27;is-correct&#x27; : &#x27;is-wrong&#x27;);
+    button.appendChild(icon(isCorrect ? &#x27;check&#x27; : &#x27;close&#x27;, &#x27;option-icon&#x27;));
+    var mark = fill(isCorrect ? &#x27;correctMark&#x27; : &#x27;incorrectMark&#x27;);
+    button.querySelector(&#x27;.option-mark&#x27;).textContent = &#x27; (&#x27; + mark + &#x27;)&#x27;;
+  }
+
+  function choose(choice) {
+    if (state.answers[state.index] !== null) return;
+    var q = questions[state.index];
+    var right = choice === q.correct;
+    state.answers[state.index] = choice;
+    if (right) state.score += 1;
+
+    var buttons = optionButtons();
+    buttons.forEach(function (button) { button.disabled = true; });
+    markOption(buttons[q.correct], &#x27;correct&#x27;);
+    if (!right) markOption(buttons[choice], &#x27;wrong&#x27;);
+
+    var card = el(&#x27;div&#x27;, &#x27;feedback &#x27; + (right ? &#x27;is-correct&#x27; : &#x27;is-wrong&#x27;));
+    card.appendChild(icon(right ? &#x27;check&#x27; : &#x27;close&#x27;));
+    var body = el(&#x27;div&#x27;, &#x27;feedback-body body-medium&#x27;);
+    body.appendChild(el(&#x27;strong&#x27;, &#x27;title-medium&#x27;, fill(right ? &#x27;correct&#x27; : &#x27;incorrect&#x27;)));
+    if (!right) body.appendChild(el(&#x27;p&#x27;, null, fill(&#x27;correctAnswerIs&#x27;, { answer: q.options[q.correct] })));
+    body.appendChild(el(&#x27;p&#x27;, null, q.feedback));
+    card.appendChild(body);
+    ui.feedback.appendChild(card);
+
+    ui.next.disabled = false;
+    updateStatus();
+    ui.next.focus({ preventScroll: true });
+    revealFeedback([buttons[q.correct], buttons[choice]]);
+  }
+
+  function syncBarHeight() {
+    document.documentElement.style.setProperty(&#x27;--app-bar-height&#x27;, ui.appBar.offsetHeight + &#x27;px&#x27;);
+  }
+
+  function revealFeedback(marked) {
+    var anchorTop = Math.min.apply(null, marked.map(function (b) { return b.getBoundingClientRect().top; }));
+    var limit = anchorTop - ui.appBar.offsetHeight - 16;
+    var needed = Math.max(0, ui.next.getBoundingClientRect().bottom + 16 - window.innerHeight);
+    var delta = Math.min(needed, limit);
+    if (delta) window.scrollBy(0, delta);
+  }
+
+  function scrollToCard() {
+    var top = ui.quiz.getBoundingClientRect().top;
+    var barHeight = ui.appBar.offsetHeight;
+    if (top &lt; barHeight) window.scrollBy(0, top - barHeight - 16);
+  }
+
+  function goNext() {
+    if (state.answers[state.index] === null) return;
+    if (state.index &lt; total - 1) {
+      state.index += 1;
+      renderQuestion();
+      scrollToCard();
+      ui.heading.focus({ preventScroll: true });
+    } else {
+      showResult();
+    }
+  }
+
+  function commentKey(percent) {
+    if (percent &gt;= 90) return &#x27;comment90&#x27;;
+    if (percent &gt;= 70) return &#x27;comment70&#x27;;
+    if (percent &gt;= 50) return &#x27;comment50&#x27;;
+    return &#x27;commentLow&#x27;;
+  }
+
+  function reviewAnswer(label, text, correct) {
+    var row = el(&#x27;div&#x27;, &#x27;review-answer &#x27; + (correct ? &#x27;is-correct&#x27; : &#x27;is-wrong&#x27;));
+    row.appendChild(icon(correct ? &#x27;check&#x27; : &#x27;close&#x27;));
+    var body = el(&#x27;div&#x27;, &#x27;body-medium&#x27;);
+    body.appendChild(el(&#x27;span&#x27;, &#x27;review-answer-label label-medium&#x27;, label));
+    body.appendChild(document.createTextNode(text));
+    body.appendChild(el(&#x27;span&#x27;, &#x27;sr-only&#x27;, &#x27; (&#x27; + fill(correct ? &#x27;correctMark&#x27; : &#x27;incorrectMark&#x27;) + &#x27;)&#x27;));
+    row.appendChild(body);
+    return row;
+  }
+
+  function renderReview() {
+    ui.reviewList.textContent = &#x27;&#x27;;
+    questions.forEach(function (q, i) {
+      var choice = state.answers[i];
+      var right = choice === q.correct;
+      var item = el(&#x27;li&#x27;, &#x27;review-item&#x27;);
+      var head = el(&#x27;div&#x27;, &#x27;review-head&#x27;);
+      var headText = el(&#x27;div&#x27;);
+      headText.appendChild(el(&#x27;h3&#x27;, &#x27;title-medium&#x27;, q.title));
+      headText.appendChild(el(&#x27;p&#x27;, &#x27;body-medium muted&#x27;, q.question));
+      head.appendChild(headText);
+      item.appendChild(head);
+      if (choice !== null) item.appendChild(reviewAnswer(fill(&#x27;reviewYourAnswer&#x27;), q.options[choice], right));
+      if (!right) item.appendChild(reviewAnswer(fill(&#x27;reviewCorrectAnswer&#x27;), q.options[q.correct], true));
+      item.appendChild(el(&#x27;p&#x27;, &#x27;body-medium&#x27;, q.feedback));
+      ui.reviewList.appendChild(item);
+    });
+  }
+
+  function showResult() {
+    var percent = total ? Math.round((state.score / total) * 100) : 0;
+    ui.percent.textContent = percent + &#x27;%&#x27;;
+    ui.summary.textContent = fill(&#x27;resultSummary&#x27;, { score: state.score, total: total });
+    ui.comment.textContent = fill(commentKey(percent));
+    renderReview();
+    ui.review.open = false;
+    ui.quiz.hidden = true;
+    ui.result.hidden = false;
+    restartAnimation(ui.result.firstElementChild);
+    window.scrollTo(0, 0);
+    ui.resultTitle.focus({ preventScroll: true });
+  }
+
+  function restart() {
+    reset();
+    ui.result.hidden = true;
+    ui.quiz.hidden = false;
+    ui.review.open = false;
+    renderQuestion();
+    window.scrollTo(0, 0);
+    ui.heading.focus({ preventScroll: true });
+  }
+
+  document.addEventListener(&#x27;keydown&#x27;, function (event) {
+    if (event.ctrlKey || event.metaKey || event.altKey || ui.quiz.hidden) return;
+    var buttons = optionButtons();
+    if (/^[1-9]$/.test(event.key)) {
+      var n = Number(event.key) - 1;
+      if (n &lt; buttons.length &amp;&amp; state.answers[state.index] === null) {
+        event.preventDefault();
+        choose(n);
+      }
+      return;
+    }
+    if (event.key === &#x27;ArrowDown&#x27; || event.key === &#x27;ArrowUp&#x27;) {
+      var enabled = buttons.filter(function (b) { return !b.disabled; });
+      var current = enabled.indexOf(document.activeElement);
+      if (!enabled.length || (current === -1 &amp;&amp; !ui.card.contains(document.activeElement))) return;
+      event.preventDefault();
+      var step = event.key === &#x27;ArrowDown&#x27; ? 1 : -1;
+      var target = current === -1 ? (step &gt; 0 ? 0 : enabled.length - 1) : (current + step + enabled.length) % enabled.length;
+      enabled[target].focus();
+    }
+  });
+
+  ui.next.addEventListener(&#x27;click&#x27;, goNext);
+  ui.restartDuring.addEventListener(&#x27;click&#x27;, restart);
+  ui.restart.addEventListener(&#x27;click&#x27;, restart);
+
+  var ticking = false;
+  window.addEventListener(&#x27;scroll&#x27;, function () {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () {
+      ui.appBar.classList.toggle(&#x27;is-scrolled&#x27;, window.scrollY &gt; 0);
+      ticking = false;
+    });
+  }, { passive: true });
+
+  window.addEventListener(&#x27;resize&#x27;, syncBarHeight);
+
+  applyStaticStrings();
+  reset();
+  renderQuestion();
+  syncBarHeight();
+})();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</div>
+<div id="notes" aria-live="polite"></div>
+<nav id="controls" aria-label="Навігація презентацією">
+  <button id="prev" aria-label="Попередній слайд">←</button>
+  <span id="counter"></span>
+  <button id="next" aria-label="Наступний слайд">→</button>
+  <button id="notes-btn" aria-label="Нотатки доповідача" title="Нотатки (N)">Нотатки</button>
+  <button id="fs-btn" aria-label="На весь екран" title="На весь екран (F)">⛶</button>
+</nav>
+<script>
+(() => {
+  const slides = [...document.querySelectorAll('#stage > section')];
+  const stage = document.getElementById('stage');
+  const layer = document.getElementById('quiz-layer');
+  const notes = document.getElementById('notes');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let i = 0;
+  let showNotes = false;
+
+  function fit() {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    stage.style.transform = 'scale(' + s + ')';
+  }
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((el, k) => el.classList.toggle('active', k === i));
+    const isQuiz = slides[i].hasAttribute('data-quiz');
+    layer.classList.toggle('active', isQuiz);
+    document.body.classList.toggle('quiz-mode', isQuiz);
+    counter.textContent = (i + 1) + ' / ' + slides.length;
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+    const aside = slides[i].querySelector('aside.notes');
+    notes.textContent = aside ? aside.textContent : '';
+    notes.classList.toggle('show', showNotes && !!aside);
+    try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+  }
+
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  document.getElementById('notes-btn').onclick = () => { showNotes = !showNotes; show(i); };
+  document.getElementById('fs-btn').onclick = () => {
+    if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.closest && e.target.closest('button') && (e.key === 'Enter' || e.key === ' ')) return;
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'n' || e.key === 'N' || e.key === 'т' || e.key === 'Т') { showNotes = !showNotes; show(i); }
+    else if (e.key === 'f' || e.key === 'F' || e.key === 'а' || e.key === 'А') document.getElementById('fs-btn').click();
+  });
+
+  let x0 = null;
+  stage.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+
+  window.addEventListener('resize', fit);
+  fit();
+  const start = parseInt(location.hash.slice(1), 10);
+  show(Number.isFinite(start) ? start - 1 : 0);
+})();
+</script>
+</body>
+</html>
